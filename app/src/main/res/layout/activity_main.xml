@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.CremakerWatch.MainActivity">
+
+    <TextView
+        android:id="@+id/bluetooth_State"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.109" />
+
+    <TextView
+        android:id="@+id/bt_List_Title_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="블루투스 리스트"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/scanedBt_ListView"
+        app:layout_constraintStart_toStartOf="@+id/scanedBt_ListView"
+        app:layout_constraintTop_toBottomOf="@+id/bluetooth_State"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/BLE_Scan_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="BLE 검색"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.298"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/msgEditTextBox" />
+
+    <Button
+        android:id="@+id/disconnect_BLE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="136dp"
+        android:text="연결 끊기"
+        app:layout_constraintStart_toStartOf="@+id/BLE_Scan_Btn"
+        app:layout_constraintTop_toTopOf="@+id/BLE_Scan_Btn" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/msgEditTextBox"
+        android:layout_width="239dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="24dp"
+        android:hint="메세지 입력"
+        app:layout_constraintStart_toStartOf="@+id/scanedBt_ListView"
+        app:layout_constraintTop_toBottomOf="@+id/scanedBt_ListView" />
+
+    <Button
+        android:id="@+id/sendMsg_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="24dp"
+        android:text="보내기"
+        app:layout_constraintEnd_toEndOf="@+id/scanedBt_ListView"
+        app:layout_constraintHorizontal_bias="0.307"
+        app:layout_constraintStart_toEndOf="@+id/msgEditTextBox"
+        app:layout_constraintTop_toBottomOf="@+id/scanedBt_ListView" />
+
+    <ListView
+        android:id="@+id/scanedBt_ListView"
+        android:layout_width="322dp"
+        android:layout_height="224dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bluetooth_State"
+        app:layout_constraintVertical_bias="0.227" />
+
+    <TextView
+        android:id="@+id/rec_Label_Textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="수신 값 : "
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/bt_List_Title_Text"
+        app:layout_constraintTop_toTopOf="@+id/bt_List_Title_Text" />
+
+    <TextView
+        android:id="@+id/rec_Msg_Textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="수신 메세지"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/rec_Label_Textview"
+        app:layout_constraintTop_toTopOf="@+id/rec_Label_Textview" />
+
+    <Button
+        android:id="@+id/notification_List_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="알림 설정"
+        app:layout_constraintStart_toStartOf="@+id/disconnect_BLE"
+        app:layout_constraintTop_toBottomOf="@+id/disconnect_BLE" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

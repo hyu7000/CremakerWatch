@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/successButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="설정하기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.34"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ask_allow_notification_textview" />
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:text="완료"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintStart_toEndOf="@+id/successButton"
+        app:layout_constraintTop_toTopOf="@+id/successButton" />
+
+    <TextView
+        android:id="@+id/ask_allow_notification_textview"
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="알림을 전송하려면\n알림 권한을 허용해야 합니다. \n설정하기 버튼으로 알림을 허용하고, 완료 버튼을 눌러줍니다."
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
