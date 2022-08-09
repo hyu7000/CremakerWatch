@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         lateinit var instance: MainActivity
     }
 
+    init {
+        instance = this
+    }
+
     var bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
     var REQUEST_ENABLE_BT  = 1
@@ -63,15 +67,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // 글로벌 변수에 현재 경도 위도 값을 얻고 저장함
-        instance = this
         var getLocationValue = GetLocation()
         getLocationValue?.getLocation()
 
+        // 주기적으로 메세지 보내는 함수 시작
+        var sendMsgPeriodically = SendMsgPeriodically()
+        sendMsgPeriodically.sendMsgP(10000)
+
         // 날씨 API에 데이터 요청
-        Handler(Looper.getMainLooper()).postDelayed({
-            getWeather.calXYFromGPS(latitudeValue, longitudeValue)
-            getWeather.askAPIWeather()
-        }, 10000)
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            getWeather.calXYFromGPS(latitudeValue, longitudeValue)
+//            getWeather.askAPIWeather()
+//        }, 10000)
 
         // 각 컴포넌트 초기화, 초기설정
         textBLS          = findViewById(R.id.bluetooth_State) as TextView
