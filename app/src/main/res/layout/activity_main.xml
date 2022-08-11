@@ -105,9 +105,17 @@
         android:id="@+id/notification_List_Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
         android:text="알림 설정"
-        app:layout_constraintStart_toStartOf="@+id/disconnect_BLE"
+        app:layout_constraintStart_toStartOf="@+id/BLE_Scan_Btn"
         app:layout_constraintTop_toBottomOf="@+id/disconnect_BLE" />
+
+    <Button
+        android:id="@+id/exitBGBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="백그라운드종료"
+        app:layout_constraintStart_toStartOf="@+id/disconnect_BLE"
+        app:layout_constraintTop_toTopOf="@+id/notification_List_Btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

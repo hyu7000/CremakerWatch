@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.bluetooth.*
 import android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT8
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -20,9 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.CremakerWatch.R
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.notification_list.*
 import java.util.*
 
 
@@ -30,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         lateinit var instance: MainActivity
+        var getLocationValue = GetLocation()
+        lateinit var sendToAlarmList : SharedPreferences
     }
 
     init {
@@ -66,19 +67,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var test = NotificationAppList()
+
+        sendToAlarmList = getSharedPreferences("appListToSendMsg", MODE_PRIVATE)
+
         // 글로벌 변수에 현재 경도 위도 값을 얻고 저장함
-        var getLocationValue = GetLocation()
         getLocationValue?.getLocation()
 
         // 주기적으로 메세지 보내는 함수 시작
         var sendMsgPeriodically = SendMsgPeriodically()
-        sendMsgPeriodically.sendMsgP(10000)
+        sendMsgPeriodically.sendMsgP(600000) // 600,000 = 10min
 
-        // 날씨 API에 데이터 요청
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            getWeather.calXYFromGPS(latitudeValue, longitudeValue)
-//            getWeather.askAPIWeather()
-//        }, 10000)
+        // 백그라운드 서비스 시작
+        val bgIntent = Intent(this, SendMsgServiceBackground::class.java)
+        startService(bgIntent)
 
         // 각 컴포넌트 초기화, 초기설정
         textBLS          = findViewById(R.id.bluetooth_State) as TextView
@@ -103,7 +105,8 @@ class MainActivity : AppCompatActivity() {
                     Manifest.permission.BLUETOOTH_CONNECT,
                     Manifest.permission.BLUETOOTH_ADVERTISE,
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION),98)
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.FOREGROUND_SERVICE),98)
                 Log.d("cw_test","권한 요청")
             }
         }
@@ -139,6 +142,12 @@ class MainActivity : AppCompatActivity() {
         val noButton = mDialogView.findViewById<Button>(R.id.closeButton)
         noButton.setOnClickListener {
             mAlertDialog?.dismiss()
+        }
+
+        val exitBtn: Button = findViewById(R.id.exitBGBtn)
+        exitBtn.setOnClickListener {
+            stopService(bgIntent)
+            Log.d("cw_test","백그라운드 종료")
         }
 
         //BLE 스캔 시작 버튼의 동작 구성, leScanCallback 함수를 콜백

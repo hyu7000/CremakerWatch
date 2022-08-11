@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.CremakerWatch.R
+import com.example.CremakerWatch.MainActivity.Companion.sendToAlarmList
 import kotlinx.android.synthetic.main.notification_list.*
 
 var isThereDataList = false
@@ -22,18 +22,20 @@ class NotificationAppList: AppCompatActivity() {
 
     companion object{
         lateinit var instanceNotiList: NotificationAppList
+        var isInitInstanceOfNoti : Boolean = false
     }
-
-    init {
-        instanceNotiList = this
-    }
-
-    lateinit var sendToAlarmList: SharedPreferences
 
     lateinit var appRecyclerViewAdapter: AppRecyclerViewAdapter
     val datas = mutableListOf<RecyclerViewItem>()
 
     var strToCheck:String = ""
+
+    init {
+        instanceNotiList = this
+        Log.d("cw_test","초기화됨 9")
+
+        isInitInstanceOfNoti = true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +73,7 @@ class NotificationAppList: AppCompatActivity() {
 
         datas.clear()
 
-        sendToAlarmList = getSharedPreferences("appListToSendMsg", MODE_PRIVATE)
+//        sendToAlarmList = getSharedPreferences("appListToSendMsg", MODE_PRIVATE)
 
         val packageManager = this.packageManager
         val applications: List<ApplicationInfo> = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)

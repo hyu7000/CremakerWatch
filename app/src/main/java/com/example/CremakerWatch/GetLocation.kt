@@ -16,25 +16,29 @@ class GetLocation {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     @SuppressLint("MissingPermission")
-    fun getLocation(){
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(MainActivity.instance)
+    fun getLocation(isFirst: Boolean = true){
+        if(isFirst) fusedLocationClient = LocationServices.getFusedLocationProviderClient(MainActivity.instance)
 
         fusedLocationClient.getLastLocation()
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    Log.d("cw_test", "위치 : " + location.toString())
-                    Log.d("cw_test", "위도 : " + location?.latitude)
-                    Log.d("cw_test", "경도 : " + location?.longitude)
+            if (location != null) {
+                Log.d("cw_test", "위치 : " + location.toString())
+                Log.d("cw_test", "위도 : " + location?.latitude)
+                Log.d("cw_test", "경도 : " + location?.longitude)
 
-                    latitudeValue = location?.latitude
-                    longitudeValue = location?.longitude
+                latitudeValue = location?.latitude
+                longitudeValue = location?.longitude
 
-                    isGetLocationValue = true
+                isGetLocationValue = true
 
-                }else{
-                    Log.d("cw_test", "location is Null")
-                }
+            } else {
+                Log.d("cw_test", "location is Null")
             }
+        }
+
+        fusedLocationClient.lastLocation.addOnFailureListener {
+            Log.d("cw_test", "위치 정보를 가져오지 못함" + it.toString())
+        }
     }
 }
