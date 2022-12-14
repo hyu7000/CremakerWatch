@@ -23,11 +23,12 @@ class GetLocation {
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {
-                Log.d("cw_test", "위치 : " + location.toString())
-                Log.d("cw_test", "위도 : " + location?.latitude)
-                Log.d("cw_test", "경도 : " + location?.longitude)
+//                Log.d("cw_test", "위치 : " + location.toString())
+//                Log.d("cw_test", "위도 : " + location?.latitude)
+//                Log.d("cw_test", "경도 : " + location?.longitude)
+                Log.d("cw_test", "위치 확인")
 
-                latitudeValue = location?.latitude
+                latitudeValue  = location?.latitude
                 longitudeValue = location?.longitude
 
                 isGetLocationValue = true

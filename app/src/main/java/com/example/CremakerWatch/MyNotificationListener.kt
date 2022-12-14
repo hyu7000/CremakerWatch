@@ -6,6 +6,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
+import android.os.Handler
+import android.os.Looper
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
@@ -34,6 +36,8 @@ class MyNotificationListener: NotificationListenerService()  {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
+        if(!isConnectedBLE) return
+
         val notification = sbn!!.notification
         val extras = sbn!!.notification.extras
         val title = extras.getString(Notification.EXTRA_TITLE)
@@ -41,7 +45,7 @@ class MyNotificationListener: NotificationListenerService()  {
         val subText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT)
 
         largeIcon = notification.getLargeIcon()
-        convertAndSendBitmapToArray()
+        //convertAndSendBitmapToArray()
 
         Log.d("cw_test"," title: " + title)
         Log.d("cw_test"," text : " + text)
@@ -53,21 +57,31 @@ class MyNotificationListener: NotificationListenerService()  {
         if(isInitInstanceOfNoti) {
             sbn?.packageName?.run {
 
-                var sendMsg = "MS T:" + title + " C:" + text + " S:" + subText
-                Log.d("cw_test_Msg", sendMsg)
+                var sendMsg = arrayOfNulls<String>(4)
+                sendMsg[0] = "MS T:" + title
+                sendMsg[1] = "MS C:" + text
+                sendMsg[2] = "MS S:" + subText
+                sendMsg[3] = "MS O"
+
+                if(title.toString() == "null") return@run
+                else {
+                    Log.d("cw_test_Msg", "title : " + title.toString())
+                }
 
                 var isThereSendPackageList =
                     NotificationAppList.instanceNotiList.checkValueOfAppList(sbn.packageName)
 
-                if (isThereSendPackageList && preSendMsg != sendMsg) {
-                    MainActivity.instance.sendMsgToBLEDevice(sendMsg)
-                    preSendMsg = sendMsg
-                } else {
-                    Log.d("cw_test_Msg", "필터됨")
+                var delayTime: Long = 0
+
+                for (i in 0..3) {
+                    if (isThereSendPackageList && preSendMsg != sendMsg[i]) {
+                        MainActivity.instance.sendMsgToBLEDevice(sendMsg[i].toString(), true)
+                        preSendMsg = sendMsg[i].toString()
+                    } else {
+                        Log.d("cw_test_Msg", "Noti 필터됨")
+                    }
                 }
             }
-        }else{
-            Log.d("cw_test","아직 생성안됨")
         }
     }
 

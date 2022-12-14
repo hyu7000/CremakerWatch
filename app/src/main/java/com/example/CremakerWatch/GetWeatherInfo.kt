@@ -34,14 +34,6 @@ val VEC_RES = 5
 val VVV_RES = 6
 val WSD_RES = 7
 
-var isConnected  = false
-
-var bluetoothDevice: BluetoothDevice? = null
-var bluetoothGatt: BluetoothGatt?     = null
-
-var curWriteCharacteristic: BluetoothGattCharacteristic?  = null
-var curNotifyCharacteristic: BluetoothGattCharacteristic? = null
-
 data class WEATHER (
     val response : RESPONSE
 )
@@ -105,17 +97,21 @@ class GetWeatherInfo {
         val formattedDate = currentDate.format(formatterDate)
 
         var currentHour = currentDate.hour
+        var currentMin  = currentDate.minute
 
-        currentHour--
+        if(currentMin < 30) currentHour--
 
         base_data = formattedDate
         base_time = currentHour.toString() + "00"
 
-        Log.d("cw_test","data : " + base_data + "time : " + base_time)
+        Log.d("cw_test","data : " + base_data + ", time : " + base_time)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun askAPIWeather() {
+
+        if(!isConnectedBLE) return
+
         setDateTime()
 
         val call = ApiObject.retrofitService.GetWeather(num_of_rows, page_no, data_type , base_data, base_time, nx, ny)
@@ -123,30 +119,29 @@ class GetWeatherInfo {
         call.enqueue(object : retrofit2.Callback<WEATHER>{
             override fun onResponse(call: Call<WEATHER>, response: Response<WEATHER>) {
                 if (response.isSuccessful){
-                    Log.d("api", " 1: "+response.body().toString())
                     try {
 //                        Log.d("api", " 2: " + response.body()!!.response.body.items.item.toString())
 //                        Log.d("api"," 3: " + response.body()!!.response.body.items.item[0].obsrValue)
 
                         var weatherDataToSsend = WeatherDataToSsend(
-                            response.body()!!.response.body.items.item[PTY_RES].obsrValue,
-                            response.body()!!.response.body.items.item[T1H_RES].obsrValue,
-                            response.body()!!.response.body.items.item[WSD_RES].obsrValue
+                            response.body()?.response!!.body.items.item[PTY_RES].obsrValue,
+                            response.body()?.response!!.body.items.item[T1H_RES].obsrValue,
+                            response.body()?.response!!.body.items.item[WSD_RES].obsrValue
                         )
-
+//
                         var mainActivity = MainActivity()
                         mainActivity.sendMsgToBLEDevice(
-                            "WS PTY" + weatherDataToSsend.precipitation.toString() +
-                                    " T1H" + weatherDataToSsend.temperature.toString() +
-                                    " WSD" + weatherDataToSsend.windSpeed.toString() + " WE"
-                        )
+                            "WD PTY" + weatherDataToSsend.precipitation.toString(), true //강수형태
+                        ) // 이 부분은 가독성을 위해 분리할 것
 
-                        Log.d("cw_test", "pre"+weatherDataToSsend.precipitation.toString())
-                        Log.d("cw_test", "tem"+weatherDataToSsend.temperature.toString())
-                        Log.d("cw_test", "ws"+weatherDataToSsend.windSpeed.toString())
+                        mainActivity.sendMsgToBLEDevice(
+                            "WD T1H" + weatherDataToSsend.temperature.toString(), true //기온
+                        ) // 이 부분은 가독성을 위해 분리할 것
+
+                        Log.d("cw_test_weather", "pre"+weatherDataToSsend.precipitation.toString() + ", tem"+weatherDataToSsend.temperature.toString() + ", ws"+weatherDataToSsend.windSpeed.toString())
                     }
                     catch (e: RuntimeException) {
-                        Log.d("api","API를 얻어오지 못함")
+                        Log.d("cw_test_weather","API를 얻어오지 못함, Err :" + e.toString())
                     }
                 }
             }
